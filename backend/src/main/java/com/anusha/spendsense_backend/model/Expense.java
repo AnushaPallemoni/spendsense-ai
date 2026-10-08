@@ -1,4 +1,3 @@
-
 package com.anusha.spendsense_backend.model;
 
 import jakarta.persistence.*;
@@ -30,4 +29,8 @@ public class Expense {
 
     @Column(nullable = false)
     private LocalDate expenseDate;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User owner;
 }
