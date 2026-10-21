@@ -2,6 +2,7 @@ package com.anusha.spendsense_backend.controller;
 
 import com.anusha.spendsense_backend.dto.ExpenseRequest;
 import com.anusha.spendsense_backend.dto.ExpenseResponse;
+import com.anusha.spendsense_backend.dto.ExpenseTextRequest;
 import com.anusha.spendsense_backend.service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,13 @@ public class ExpenseController {
         return expenseService.create(authentication.getName(), request);
     }
 
+    @PostMapping("/ai")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ExpenseResponse createFromText(@Valid @RequestBody ExpenseTextRequest request,
+                                          Authentication authentication) {
+        return expenseService.createFromText(authentication.getName(), request.text());
+    }
+
     @GetMapping
     public List<ExpenseResponse> list(Authentication authentication) {
         return expenseService.findAll(authentication.getName());
@@ -36,3 +44,6 @@ public class ExpenseController {
         expenseService.delete(authentication.getName(), id);
     }
 }
+
+
+
