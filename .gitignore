@@ -1,0 +1,12 @@
+#IDE
+.idea/
+*.iml
+
+
+
+#secrets and local files
+.env
+*.log
+#Windows
+desktop.ini
+Thunbs.db
