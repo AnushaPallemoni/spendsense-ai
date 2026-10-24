@@ -90,7 +90,7 @@ function Dashboard({ onLogout }) {
 
   async function addWithAi(e) {
     e.preventDefault()
-    if (!aiText.trim()) return
+    if (!aiText.trim() || aiBusy) return
     setError('')
     setAiBusy(true)
     try {
