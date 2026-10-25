@@ -1,49 +1,141 @@
-# SpendSense AI
+# SpendSense AI — AI-Powered Expense Tracker
 
-An expense tracker where you type a normal sentence like *"spent 250 on biryani with friends"* and AI saves it as a structured expense.
+An AI-powered expense tracker that lets users describe transactions in everyday language, such as *"Spent 250 on biryani with friends"*, and converts them into structured expense records.
 
-![Dashboard](docs/dashboard.png)
-![AI input](docs/ai-result.png)
+<p align="center">
+  <a href="https://spendsense-ai.duckdns.org"><strong>🌐 Live Demo</strong></a>
+  &nbsp; • &nbsp;
+  <a href="https://github.com/AnushaPallemoni/spendsense-ai"><strong>📂 GitHub Repository</strong></a>
+</p>
 
 ## Features
-- Register and log in with JWT authentication
-- Every user sees only their own expenses
-- Add expenses by typing a sentence (Spring AI + Google Gemini), or with a manual form
-- Spending totals and a bar per category
-- AI output is validated (amount, category list, date) before it is saved
 
-## Tech stack
-Java 21, Spring Boot 4, Spring Security (JWT), Spring AI, PostgreSQL, React (Vite), Nginx, Docker, Docker Compose, AWS EC2, JUnit and Mockito.
+- **JWT authentication:** Register and log in securely.
+- **User-specific expenses:** Users can access their own expense records.
+- **AI-powered expense entry:** Convert natural-language descriptions into structured expense data using Spring AI and Google Gemini.
+- **Manual expense entry:** Add expenses through a standard form.
+- **Spending insights:** View spending totals and category-wise breakdowns.
+- **AI response validation:** Validate generated amounts, categories, and dates before saving.
+- **REST APIs:** Support authentication and expense management.
+- **Cloud deployment:** Deployed on AWS EC2 using Docker Compose with HTTPS.
+
+## Technology Stack
+
+| Component | Technologies |
+|---|---|
+| Backend | Java 21, Spring Boot |
+| Security | Spring Security, JWT |
+| AI integration | Spring AI, Google Gemini API |
+| Database | PostgreSQL |
+| Frontend | React, Vite |
+| Web server and HTTPS | Nginx, Caddy |
+| Containerization | Docker, Docker Compose |
+| Cloud | AWS EC2, Ubuntu |
+| Testing | JUnit, Mockito |
 
 ## Architecture
-~~~
-Browser -> Nginx (React build, port 80) -> Spring Boot API -> PostgreSQL
-                                                |
-                                                +-> Gemini API
-~~~
-Only Nginx is exposed to the internet. The API and the database stay inside the Docker network.
 
-## Run it locally with Docker
-~~~bash
+```text
+Browser
+   |
+   | HTTPS
+   v
+Caddy (TLS / HTTPS)
+   |
+   v
+Nginx (React frontend)
+   |
+   | /api requests
+   v
+Spring Boot REST API
+   |
+   +------> PostgreSQL
+   |
+   +------> Google Gemini API
+```
+
+Caddy handles HTTPS and forwards browser traffic to Nginx. Nginx serves the React frontend and proxies API requests to Spring Boot. The backend and PostgreSQL communicate over the Docker network, keeping the database off the public internet.
+
+## Live Deployment
+
+**Live URL:** https://spendsense-ai.duckdns.org
+
+The application is deployed on an Ubuntu-based AWS EC2 instance using Docker Compose. Caddy manages the HTTPS certificate, and Nginx serves the frontend and forwards API requests to the backend.
+
+## Run Locally with Docker Compose
+
+### Prerequisites
+
+- Git
+- Docker and Docker Compose
+- Google Gemini API key for AI-powered expense entry
+
+### Setup
+
+**1. Clone the repository**
+
+```bash
 git clone https://github.com/AnushaPallemoni/spendsense-ai.git
 cd spendsense-ai
-cp .env.example .env     # then edit .env with your own values
+```
+
+**2. Configure environment variables**
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your local configuration and required credentials.
+
+**3. Build and start the application**
+
+```bash
 docker compose up --build -d
-~~~
-Open http://localhost:8081 (set `WEB_PORT` in `.env`).
+```
 
-## API
-| Method | Path | What it does |
+**4. Open the application**
+
+Visit [http://localhost:8081](http://localhost:8081) when using the default local configuration. If you change `WEB_PORT` in `.env`, use the configured port.
+
+**Useful Docker commands**
+
+```bash
+docker compose ps
+docker compose logs --tail=100
+docker compose down
+```
+
+Never commit real API keys, database passwords, JWT secrets, or production environment files to GitHub.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
 |---|---|---|
-| POST | /api/auth/register | Create an account |
-| POST | /api/auth/login | Get a JWT |
-| GET | /api/expenses | List your expenses |
-| POST | /api/expenses | Add an expense |
-| POST | /api/expenses/ai | Add an expense from a sentence |
-| DELETE | /api/expenses/{id} | Delete one of your expenses |
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Authenticate a user and obtain a JWT |
+| GET | `/api/expenses` | Retrieve the authenticated user's expenses |
+| POST | `/api/expenses` | Create an expense manually |
+| POST | `/api/expenses/ai` | Create an expense from a natural-language description |
+| DELETE | `/api/expenses/{id}` | Delete an expense owned by the authenticated user |
 
-## Deployment
-Deployed on an AWS EC2 Ubuntu server with Docker Compose. [Live demo available on request.]
+## Testing
 
-## What I learned
-Git branching and pull requests, JWT security, writing unit tests with mocks, containerizing a full-stack app, cloud deployment, and handling an unreliable external AI API with retries and validation.
+The backend uses **JUnit and Mockito** for unit testing. Tests can be run from the backend project directory using the build tool configured in the project.
+
+## What I Learned
+
+- Developing REST APIs using Java and Spring Boot
+- Implementing JWT authentication and user-specific data access
+- Integrating React with a Spring Boot backend
+- Connecting PostgreSQL to a full-stack application
+- Integrating a generative AI API and validating its responses
+- Containerizing services with Docker Compose
+- Deploying a full-stack application to AWS EC2 with HTTPS
+- Using Git and GitHub for version control
+
+---
+
+**Live Demo:** https://spendsense-ai.duckdns.org
+
+**Source Code:** https://github.com/AnushaPallemoni/spendsense-ai
+
