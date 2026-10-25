@@ -58,6 +58,10 @@ Caddy handles HTTPS and forwards browser traffic to Nginx. Nginx serves the Reac
 
 ## Live Deployment
 
+## Demo Video
+
+Watch the [SpendSense AI live demo video](https://github.com/AnushaPallemoni/spendsense-ai/issues/15#issue-6025105133).
+
 **Live URL:** https://spendsense-ai.duckdns.org
 
 The application is deployed on an Ubuntu-based AWS EC2 instance using Docker Compose. Caddy manages the HTTPS certificate, and Nginx serves the frontend and forwards API requests to the backend.
